@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: orderer-ca
+  # namespace: hyperledger
+  labels:
+    run: orderer-ca
+spec:
+  ports: 
+  - port: 7054
+    targetPort: 7054
+    protocol: TCP
+    name: ca-tcp
+  selector:
+    app: orderer-ca
+  type: LoadBalancer

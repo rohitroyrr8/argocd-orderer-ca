@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: orderer-ca
+  # namespace: hyperledger
+  labels:
+    app: orderer-ca
+spec:
+  serviceName: orderer-ca
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orderer-ca
+  template:
+    metadata:
+      labels:
+        app: orderer-ca
+    spec:
+      containers:
+        - name: orderer-ca
+          image: rohitroyrr8/ca-orderer:latest
+          imagePullPolicy: Always
+          command: ["sh", "-c", "fabric-ca-server start -d -b orderer-ca:adminpw --port 7054"]
+          ports:
+            - containerPort: 7054
+          env:
+            - name: FABRIC_CA_HOME
+              value: /etc/hyperledger/fabric-ca-server
+            - name: FABRIC_CA_SERVER_CA_NAME
+              value: caorderer.byteprojects.in
+            - name: FABRIC_CA_SERVER_TLS_ENABLED
+              value: "true"
+            - name: FABRIC_CA_SERVER_TLS_CERTFILE
+              value: /etc/hyperledger/fabric-ca-server-config/orderer-ca-cert.pem
+            - name: FABRIC_CA_SERVER_TLS_KEYFILE
+              value: /etc/hyperledger/fabric-ca-server-config/orderer-ca.key
+          volumeMounts:
+            - name: orderer-ca-volume
+              mountPath: /etc/hyperledger/fabric-ca-server
+      volumes:
+        - name: orderer-ca-volume
+          persistentVolumeClaim:
+            claimName: orderer-ca-pvc
