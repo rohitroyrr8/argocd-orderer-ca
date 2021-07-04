@@ -36,8 +36,7 @@ spec:
               value: /etc/hyperledger/fabric-ca-server-config/orderer-ca.key
           volumeMounts:
             - name: orderer-ca-volume
-              mountPath: /etc/hyperledger/fabric-ca-server/fabric-ca-server-config.yaml
-              subPath: fabric-ca-server-config.yaml
+              mountPath: /etc/hyperledger/fabric-ca-server/
       volumes:
         - name: orderer-ca-volume
           persistentVolumeClaim:
